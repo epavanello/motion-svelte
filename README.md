@@ -1,58 +1,76 @@
-# create-svelte
+# Motion for Svelte 5
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+This project is an experimental attempt to wrap Framer Motion (now known as [motion.dev](https://motion.dev)) with Svelte. The current implementation supports Server-Side Rendering (SSR) and utilizes runes for enhanced functionality.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+## Usage Examples
 
-## Creating a project
+### Basic Animation with Enter/Exit
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+```svelte
+<Motion
+	initial={{ opacity: 0, rotate: -30 }}
+	animate={{ opacity: 1, rotate: 0 }}
+	exit={{ opacity: 0, rotate: 30 }}
+	transition={{ duration: 0.5 }}
+>
+	This is a notification!
+</Motion>
 ```
 
-## Developing
+### Infinite Animation
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```svelte
+<Motion animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+	Pulse
+</Motion>
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+### Animation on State Change
 
-## Building
-
-To build your library:
-
-```bash
-npm run package
+```svelte
+<Motion
+	animate={{ rotate: spin ? 360 : 0 }}
+	transition={{ duration: 1 }}
+	onclick={() => (spin = !spin)}
+>
+	Click to Spin
+</Motion>
 ```
 
-To create a production version of your showcase app:
+### Hover Animation
 
-```bash
-npm run build
+```svelte
+<Motion initial={{ y: 0 }} whileHover={{ y: -10 }}>Hover Card</Motion>
 ```
 
-You can preview the production build with `npm run preview`.
+### Using Animate Directive
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```svelte
+<div
+	use:animate={{
+		scale: hover ? 1.2 : 1,
+		rotate: hover ? 45 : 0,
+		transition: { type: 'spring' }
+	}}
+>
+	Hover Transform
+</div>
+```
 
-## Publishing
+### Keyframe Animation
 
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
+```svelte
+<Motion
+	animate={{
+		rotate: [0, 45, 0],
+		scale: [1, 0.8, 1]
+	}}
+	transition={{
+		duration: 2,
+		repeat: Infinity,
+		ease: 'easeInOut'
+	}}
+>
+	Keyframes
+</Motion>
 ```
