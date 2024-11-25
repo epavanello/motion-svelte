@@ -2,6 +2,14 @@
 
 This project is an experimental attempt to wrap Framer Motion (now known as [motion.dev](https://motion.dev)) with Svelte. The current implementation supports Server-Side Rendering (SSR) and utilizes runes for enhanced functionality.
 
+## Installation
+
+To install the package, run the following command:
+
+```bash
+npm i motion-svelte
+```
+
 ## Usage Examples
 
 ### Basic Animation with Enter/Exit
