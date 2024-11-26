@@ -1,9 +1,5 @@
 <script lang="ts" generics="T extends keyof HTMLElementTagNameMap = keyof HTMLElementTagNameMap">
-	import {
-		type AnimationPlaybackControls,
-		type DOMKeyframesDefinition,
-		type DynamicAnimationOptions
-	} from 'motion/react';
+	import { type DOMKeyframesDefinition, type DynamicAnimationOptions,  } from 'motion/react';
 	import {} from 'motion';
 	import { animate as motionAnimate } from 'motion';
 	import type { HTMLAttributes } from 'svelte/elements';
@@ -34,8 +30,11 @@
 
 	const restProps = $derived(rest) as object;
 
+
+	
+
 	let el = $state<HTMLElementTagNameMap[T]>();
-	let ssrStyle = $state(generateCssFromInitial(initial));
+	let ssrStyle = $state(generateCssFromInitial(initial ?? animate));
 	let isHover = $state(false);
 	let isTap = $state(false);
 
@@ -88,15 +87,16 @@
 	);
 
 	watch([() => isHover && whileHover, () => isTap && whileTap], () => {
-		if (!el) {
+		if (!el || (!whileTap && !whileHover)) {
 			return;
 		}
+		console.log({ isHover, isTap });
 		if (isTap && whileTap) {
 			runAnimation(whileTap, transition);
 		} else if (isHover && whileHover) {
 			runAnimation(whileHover, transition);
-		} else if (initial && (whileTap || whileHover)) {
-			runAnimation(initial, transition);
+		} else if (whileTap || whileHover) {
+			runAnimation(initial ?? {}, transition);
 		}
 	});
 </script>

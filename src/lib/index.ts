@@ -43,8 +43,14 @@ export function generateCssFromInitial(initial?: DOMKeyframesDefinition): string
 	const transformProperties: string[] = [];
 	const otherStyles: string[] = [];
 
-	for (const [key, value] of Object.entries(initial ?? {})) {
-		if (value === undefined || value === null) continue; // Skip undefined or null values
+	for (const [key, _value] of Object.entries(initial ?? {})) {
+		let value: string | number | null | undefined;
+		if (Array.isArray(_value)) {
+			value = _value[0];
+		} else {
+			value = _value;
+		}
+		if (_value === undefined || _value === null) continue; // Skip undefined or null _values
 
 		if (key in transformMap) {
 			// Gestione delle proprietà di transform
