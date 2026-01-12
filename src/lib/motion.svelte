@@ -1,10 +1,17 @@
 <script lang="ts" generics="T extends keyof HTMLElementTagNameMap = keyof HTMLElementTagNameMap">
-	import { type DOMKeyframesDefinition, type DynamicAnimationOptions,  } from 'motion/react';
+	import {
+		VisualElement,
+		type AnimationPlaybackControls,
+		type DOMKeyframesDefinition,
+		type DynamicAnimationOptions
+	} from 'motion/react';
+	import {} from 'motion/react';
+	import { createScopedAnimate } from 'motion';
 	import {} from 'motion';
 	import { animate as motionAnimate } from 'motion';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { generateCssFromInitial } from './index.js';
-	import { tick, untrack } from 'svelte';
+	import { onMount, tick, untrack } from 'svelte';
 	import { watch } from 'runed';
 
 	const {
@@ -30,19 +37,23 @@
 
 	const restProps = $derived(rest) as object;
 
-
-	
-
 	let el = $state<HTMLElementTagNameMap[T]>();
 	let ssrStyle = $state(generateCssFromInitial(initial ?? animate));
 	let isHover = $state(false);
 	let isTap = $state(false);
 
+	let myAnimation: typeof motionAnimate;
+	VisualElement;
+	createMotionComponentFactory
+	onMount(() => {
+		myAnimation = createScopedAnimate({ current: el, animations: [] });
+	});
+
 	function runAnimation(keyframes: DOMKeyframesDefinition, t?: DynamicAnimationOptions, _el = el) {
 		if (!_el) {
 			return;
 		}
-		return motionAnimate(_el, keyframes, t);
+		return myAnimation(_el, keyframes, t);
 	}
 
 	function onExit(node: HTMLElementTagNameMap[T]) {
